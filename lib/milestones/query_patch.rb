@@ -44,8 +44,10 @@ module Milestones
     end
   end
 end
-require 'dispatcher'
-Dispatcher.to_prepare do  
+#require 'dispatcher'
+#require 'action_dispatch'
+#ActionController::Routing::RouteSet::Dispatcher.to_pre
+Rails.configuration.to_prepare do
   unless Query.included_modules.include?(Milestones::QueryPatch)
     Query.send(:include, Milestones::QueryPatch)
   end
