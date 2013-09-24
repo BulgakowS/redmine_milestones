@@ -11,7 +11,7 @@ module Milestones
         # alias_method :statement_original_contacts, :statement
         # alias_method :statement, :statement_contacts
 
-        alias_method :available_filters_original_milestone, :available_filters
+        alias_method :available_filters_original_milestone, :empty_filters
         alias_method :available_filters, :available_filters_milestone
 
         base.add_available_column(QueryColumn.new(:milestone))
@@ -26,6 +26,10 @@ module Milestones
         milestones_select = "(#{value.join(',')})"
 
         "(#{Issue.table_name}.milestone_id #{compare} (#{milestones_select}))"
+      end
+
+      def empty_filters ()
+        return {}
       end
 
       def available_filters_milestone
