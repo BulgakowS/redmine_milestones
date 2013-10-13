@@ -26,7 +26,7 @@ module RedmineMilestones
       receiver.class_eval do
         unloadable
         if (Redmine::VERSION::MAJOR == 2)
-          puts self.instance_variable_get("@inheritable_attributes")
+          puts "xxx" #self.instance_variable_get("@inheritable_attributes")
         else
           self.instance_variable_get("@inheritable_attributes")[:view_paths] << Rails.root + "/vendor/plugins/redmine_milestones/app/views"
         end

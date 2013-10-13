@@ -28,8 +28,10 @@ module Milestones
         "(#{Issue.table_name}.milestone_id #{compare} (#{milestones_select}))"
       end
 
-      def empty_filters ()
-        return {}
+      def empty_filters
+        return @available_filters if @available_filters
+        @available_filters = {
+        }
       end
 
       def available_filters_milestone
