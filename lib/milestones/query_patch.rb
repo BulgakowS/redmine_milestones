@@ -1,6 +1,6 @@
 require_dependency 'query'
 
-module Milestones
+module RemineMilestones
   module QueryPatch
     def self.included(base)
       base.send(:include, InstanceMethods)
@@ -48,7 +48,7 @@ end
 #require 'action_dispatch'
 #ActionController::Routing::RouteSet::Dispatcher.to_pre
 Rails.configuration.to_prepare do
-  unless Query.included_modules.include?(Milestones::QueryPatch)
-    Query.send(:include, Milestones::QueryPatch)
+  unless Query.included_modules.include?(RemineMilestones::QueryPatch)
+    Query.send(:include, RemineMilestones::QueryPatch)
   end
 end

@@ -1,0 +1,165 @@
+#<div class="contextual">
+#  <%= link_to(l(:button_edit), edit_milestone_path(@milestone), :class => 'icon icon-edit') if User.current.allowed_to?(:manage_milestones, @milestone.project) %>
+#  <% if @milestone.issues.empty? and @milestone.children.empty? %>
+#    <%= link_to(l(:button_delete), milestone_path(@milestone, :back_url => url_for(:controller => 'versions', :action => 'index', :project_id => @milestone.project)),
+#              :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del') if User.current.allowed_to?(:manage_versions, @milestone.project) %>
+#  <% else %>
+#      <%= link_to_remote(l(:button_delete), :url => confirm_delete_milestone_path(@milestone, :back_url => url_for(:controller => 'versions', :action => 'index', :project_id => @milestone.project)), :html=>{:class => 'icon icon-del'}) if User.current.allowed_to?(:manage_versions, @milestone.project) %>
+
+#<% end %>
+#  <%= link_to l(:label_reports), report_milestone_path(@milestone), :class => 'icon icon-add' if User.current.allowed_to?(:manage_versions, @milestone.project) %>
+#</div>
+
+<table width='100%'>
+  <tr valign='top'>
+    <td valign='top'>
+      <h3>
+        <%= link_to @milestone.name, milestone_path(@milestone) %>
+      </h3>
+      <p>
+        <%=  @milestone.description %>
+      </p>
+      <br/>
+      <% if @milestone.completed? %>
+          <p><%= @milestone.actual_date.strftime('%d-%m-%Y') if @milestone.actual_date.present? %></p>
+      <% elsif @milestone.actual_date %>
+          <p style='text-decoration: underline'><strong><%= due_date_distance_in_words(@milestone.actual_date) %> (Actual: <%= @milestone.actual_date.strftime('%d-%m-%Y') %>) </strong> owner: <%= @milestone.user.name if @milestone.user.present? %></p>
+      <% elsif @milestone.planned_end_date %>
+          <p><strong><%= due_date_distance_in_words(@milestone.planned_end_date) %> (Planned: <%= @milestone.planned_end_date.strftime('%d-%m-%Y') %>) </strong> owner: <%= @milestone.user.name if @milestone.user.present? %></p>
+      <% end %>
+      <br/>
+      <% if @milestone.issues_count > 0 %>
+          <%= progress_bar([@milestone.closed_pourcent, @milestone.completed_pourcent], :width => '35em', :legend => '%0.0f%' % @milestone.completed_pourcent) %>
+          <p class="progress-info">
+            <%= link_to_if(@milestone.closed_issues_count > 0, l(:label_x_closed_issues_abbr, :count => @milestone.closed_issues_count), :controller => 'issues', :action => 'index', :project_id => @milestone.project, :status_id => 'c', :milestone => @milestone, :set_filter => 1) %>
+            (<%= '%0.0f' % (@milestone.closed_issues_count.to_f / @milestone.issues_count * 100) %>%)
+            &#160;
+            <%= link_to_if(@milestone.open_issues_count > 0, l(:label_x_open_issues_abbr, :count => @milestone.open_issues_count), :controller => 'issues', :action => 'index', :project_id => @milestone.project, :status_id => 'o', :milestone => @milestone, :set_filter => 1) %>
+            (<%= '%0.0f' % (@milestone.open_issues_count.to_f / @milestone.issues_count * 100) %>%)
+          </p>
+      <% else %>
+          <p class="progress-info"><%= l(:label_roadmap_no_issues_for_milestone) %></p>
+      <% end %>
+      <% unless @milestone.issues.empty? %>
+          <% form_tag({}) do -%>
+              <table class="list related-issues">
+                <caption><%= l(:label_related_issues) %></caption>
+                <% @milestone.issues.visible.each do |issue| -%>
+                    <tr class="hascontextmenu">
+                      <td><%= link_to_issue(issue, :project => (@project != issue.project)) %></td>
+                    </tr>
+                <% end -%>
+              </table>
+          <% end %>
+      <% end %>
+      <% visited_milestones ||= Set.new %>
+      <% visited_milestones << @milestone.id %>
+      <% unless @milestone.children.empty? %>
+          <h4><%= l(:label_related_milestones) %></h4>
+          <%= render :partial => "milestones/milestone", :collection => @milestone.children.reject{|x| visited_milestones.include? x.id}, :locals => {:visited_milestones => visited_milestones, :draw_hr=>true} %>
+      <% end %>
+
+
+    </td>
+    <td width="540px" valign='top'>
+      <% if @milestone.estimated_hours > 0 || User.current.allowed_to?(:view_time_entries, @project) %>
+          <fieldset class="time-tracking"><legend><%= l(:label_time_tracking) %></legend>
+            <table>
+              <tr>
+                <th><%= l(:field_estimated_hours) %></th>
+                <td class="total-hours"><%= html_hours(l_hours(@milestone.estimated_hours)) %></td>
+              </tr>
+              <% if User.current.allowed_to?(:view_time_entries, @project) %>
+                  <tr>
+                    <th><%= l(:label_spent_time) %></th>
+                    <td class="total-hours"><%= html_hours(l_hours(@milestone.spent_hours)) %></td>
+                  </tr>
+              <% end %>
+              <% if @milestone.previous_milestone.present? %>
+                  <tr>
+                    <th><%= l(:Previous_milestone) %></th>
+                    <td class="total-hours">
+                      <%= link_to @milestone.previous_milestone.name, milestone_path(@milestone.previous_milestone) %>
+                    </td>
+                  </tr>
+              <% end %>
+              <% if @milestone.next_milestone.present? %>
+                  <tr>
+                    <th><%= l(:Next_milestone) %></th>
+                    <td class="total-hours">
+                      <%= link_to @milestone.next_milestone.name, milestone_path(@milestone.next_milestone) %>
+                    </td>
+                  </tr>
+              <% end %>
+              <% if @milestone.user.present? %>
+                  <tr>
+                    <th><%= l(:Owner) %></th>
+                    <td class="total-hours">
+                      <%= @milestone.user.name %>
+                    </td>
+                  </tr>
+              <% end %>
+            </table>
+          </fieldset>
+          <fieldset class="time-tracking"><legend><%= l(:dates) %></legend>
+            <table>
+              <tr>
+                <td>
+                  <%= t(:planned_actual_start_date) %>:
+                </td>
+                <td>
+                  <% if @milestone.start_date.present? %>
+                      <%= @milestone.start_date.strftime("%d-%m-%Y") %>
+                  <% else %>
+                      <%= t(:n_a) %>
+                  <% end %>
+                  /
+                  <% if @milestone.actual_start_date.present? %>
+                    <%= @milestone.actual_start_date.strftime("%d-%m-%Y") %>
+                  <% else %>
+                    <%= t(:n_a) %>
+                  <% end %>
+                  <% if @milestone.actual_start_date.present? and @milestone.start_date.present? and @milestone.actual_start_date > @milestone.start_date %>
+                    (
+                    <%= distance_of_time_in_words(@milestone.actual_start_date, @milestone.start_date) %>
+                    <%= t(:days_delay) %>
+                    )
+                  <% end %>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <%= t(:planned_actual_end_date) %>:
+                </td>
+                <td>
+                  <% if @milestone.planned_end_date.present? %>
+                      <%= @milestone.planned_end_date.strftime("%d-%m-%Y") %>
+                  <% else %>
+                      <%= t(:n_a) %>
+                  <% end %>
+                  /
+                  <% if @milestone.actual_date.present? %>
+                      <%= @milestone.actual_date.strftime("%d-%m-%Y") %>
+                  <% else %>
+                      <%= t(:n_a) %>
+                  <% end %>
+                  <% if @milestone.actual_date.present? and @milestone.planned_end_date.present? and @milestone.actual_date > @milestone.planned_end_date %>
+                      (
+                      <%= distance_of_time_in_words(@milestone.actual_date, @milestone.planned_end_date) %>
+                      <%= t(:days_delay) %>
+                      )
+                  <% end %>
+                </td>
+              </tr>
+            </table>
+          </fieldset>
+    <% end %>
+    </td>
+  </tr>
+</table>
+
+
+<% html_title @milestone.name %>
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag "milestones", :plugin => 'redmine_milestones' %>
+<% end %>

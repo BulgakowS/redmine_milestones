@@ -1,5 +1,5 @@
-module RedmineMilestones
-  module Hooks
+module RemineMilestones
+#  module Hooks
     class HelperIssuesShowDetailAfterSettingHook < Redmine::Hook::ViewListener
       def helper_issues_show_detail_after_setting(context = { })
         if context[:detail].prop_key == 'milestone' or context[:detail].prop_key == 'milestone_id'
@@ -14,5 +14,5 @@ module RedmineMilestones
         ''
       end
     end
-  end
+#  end
 end

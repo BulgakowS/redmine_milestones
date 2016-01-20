@@ -1,17 +1,4 @@
 RedmineApp::Application.routes.draw do
-#ActionController::Routing::Routes.draw do |map|
-=begin
-  resources :projects do |project|
-    project.resources :milestones
-  end
-
-  resources :versions do |version|
-    version.resources :milestones, :collection => {
-        :report_for_version => [:get]
-    }
-  end
-=end
-
   resources :projects do
     resources :milestones
   end
@@ -35,7 +22,6 @@ RedmineApp::Application.routes.draw do
       get 'issue_version_changed'
       get 'milestone_version_changed'
       get 'add_assigned_project'
-
     end
 
     member do
@@ -48,6 +34,21 @@ RedmineApp::Application.routes.draw do
       get 'check_visibility_lost'
     end
   end
+end
+
+#ActionController::Routing::Routes.draw do |map|
+=begin
+  resources :projects do |project|
+    project.resources :milestones
+  end
+
+  resources :versions do |version|
+    version.resources :milestones, :collection => {
+        :report_for_version => [:get]
+    }
+  end
+=end
+
 =begin
   resources :milestones, :collection => {
       :parent_project_changed => [:get],
@@ -101,4 +102,3 @@ RedmineApp::Application.routes.draw do
       :check_visibility_lost => [:get]
   }
 =end
-end

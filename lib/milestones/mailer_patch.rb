@@ -1,6 +1,6 @@
 #require 'dispatcher'
 
-module RedmineMilestones
+module RemineMilestones
   module MailerPatch
     module ClassMethods
     end
@@ -36,10 +36,8 @@ module RedmineMilestones
 end
 
 Rails.configuration.to_prepare do
-
-  unless Mailer.included_modules.include?(RedmineMilestones::MailerPatch)
-    Mailer.send(:include, RedmineMIlestones::MailerPatch)
+  unless Mailer.included_modules.include?(RemineMilestones::MailerPatch)
+    Mailer.send(:include, RemineMilestones::MailerPatch)
   end
-
 end
 

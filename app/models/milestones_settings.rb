@@ -8,4 +8,6 @@ class MilestonesSettings < ActiveRecord::Base
   def disabled?
     self.value == "false"
   end
+
+
 end

@@ -13,14 +13,16 @@ require_dependency 'milestones/projects_helper_patch'
 require_dependency "milestones/gantt_patch"
 require_dependency 'milestones/mailer_patch'
 
-Redmine::Plugin.register :redmine_milestones do
+Redmine::Plugin.register :milestones do
   name 'Redmine Milestones plugin'
-  author 'RedmineCRM'
+  author 'RedmineCRM (edited by BulgakowS)'
   description 'Create, edit and manage milestones'
   version VERSION_NUMBER + '-pro' + VERSION_STATUS
   url 'http://redminecrm.com/projects/milestones'
   author_url 'http://redminecrm.com'
   requires_redmine :version_or_higher => '1.2.2'
+
+  menu :project_menu, :milestones, { :controller => 'milestones', :action => 'index' }, :caption => 'Milestones', :after => :activity, :param => :project_id
 
   project_module :milestones_module do
     permission :view_milestones, {
@@ -32,10 +34,10 @@ Redmine::Plugin.register :redmine_milestones do
   end
 
 end
-Issue.send(:include, IssuePatch)
-Version.send(:include, VersionPatch)
-Project.send(:include, ProjectPatch)
-Query.send(:include, Milestones::QueryPatch)
-ProjectsHelper.send(:include, ProjectsHelperPatch)
-Redmine::Helpers::Gantt.send(:include, GanttPatch)
-Mailer.send(:include, RedmineMilestones::MailerPatch)
+#Issue.send(:include, IssuePatch)
+#Version.send(:include, VersionPatch)
+#Project.send(:include, ProjectPatch)
+#Query.send(:include, Milestones::QueryPatch)
+#ProjectsHelper.send(:include, ProjectsHelperPatch)
+#Redmine::Helpers::Gantt.send(:include, GanttPatch)
+#Mailer.send(:include, RedmineMilestones::MailerPatch)

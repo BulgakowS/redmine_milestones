@@ -155,6 +155,11 @@ class MilestonesController < ApplicationController
     @project = @milestone.project
   end
 
+  def index
+    @project = Project.find(params[:project_id])
+    @milestones = Milestone.find_by "project_id = ?", @project.id
+  end
+
   def status_by
     @milestone = Milestone.find(params[:id])
     @issues = @milestone.issues
