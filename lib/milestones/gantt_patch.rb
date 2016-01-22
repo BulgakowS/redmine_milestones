@@ -1,4 +1,4 @@
-module RemineMilestones
+module Milestones
   module GanttPatch
     def self.included(base) # :nodoc:
       base.class_eval do
@@ -141,5 +141,11 @@ module RemineMilestones
       end
 
     end
+  end
+end
+
+Rails.configuration.to_prepare do
+  unless Project.included_modules.include?(Milestones::GanttPatch)
+    Project.send(:include, Milestones::GanttPatch)
   end
 end

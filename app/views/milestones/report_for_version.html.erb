@@ -66,12 +66,12 @@
   <% end %>
 </div>
 <% content_for :header_tags do %>
-    <%= stylesheet_link_tag "milestones", :plugin => 'redmine_milestones' %>
+    <%= stylesheet_link_tag "milestones", :plugin => 'milestones' %>
     <% if @data["percentage"].select{|x| x > 0}.length > 1 %>
-        <%= javascript_include_tag "milestones", :plugin => 'redmine_milestones' %>
-        <%= javascript_include_tag "raphael", :plugin => 'redmine_milestones' %>
-        <%= javascript_include_tag "g.raphael.js", :plugin => 'redmine_milestones' %>
-        <%= javascript_include_tag "g.pie.js", :plugin => 'redmine_milestones' %>
+        <%= javascript_include_tag "milestones", :plugin => 'milestones' %>
+        <%= javascript_include_tag "raphael", :plugin => 'milestones' %>
+        <%= javascript_include_tag "g.raphael.js", :plugin => 'milestones' %>
+        <%= javascript_include_tag "g.pie.js", :plugin => 'milestones' %>
         <% javascript_tag do %>
             Event.observe(window, 'load', function(){
                 draw_chart(<%= @data.to_json %>, '<%= t(:piechart_title) %>');

@@ -1,5 +1,5 @@
 require_dependency "version"
-module RemineMilestones
+module Milestones
   module VersionPatch
     def self.included(base) # :nodoc:
 
@@ -11,6 +11,8 @@ module RemineMilestones
   end
 end
 
-unless Project.included_modules.include?(RemineMilestones::VersionPatch)
-  Project.send(:include, RemineMilestones::VersionPatch)
+Rails.configuration.to_prepare do
+  unless Project.included_modules.include?(Milestones::VersionPatch)
+    Project.send(:include, Milestones::VersionPatch)
+  end
 end

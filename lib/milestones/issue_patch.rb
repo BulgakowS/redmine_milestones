@@ -1,5 +1,6 @@
-require_dependency "issue"
-module RemineMilestones
+#require_dependency "issue"
+
+module Milestones
   module IssuePatch
     def self.included(base) # :nodoc:
 
@@ -13,6 +14,8 @@ module RemineMilestones
   end
 end
 
-unless Issue.included_modules.include?(RemineMilestones::IssuePatch)
-  Issue.send(:include, RemineMilestones::IssuePatch)
+Rails.configuration.to_prepare do
+  unless Issue.included_modules.include?(Milestones::IssuePatch)
+    Issue.send(:include, Milestones::IssuePatch)
+  end
 end

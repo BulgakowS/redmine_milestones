@@ -1,4 +1,4 @@
-module RemineMilestones
+module Milestones
   module ProjectPatch
     def self.included(base) # :nodoc:
 
@@ -48,6 +48,8 @@ module RemineMilestones
   end
 end
 
-unless Project.included_modules.include?(RemineMilestones::ProjectPatch)
-  Project.send(:include, RemineMilestones::ProjectPatch)
+Rails.configuration.to_prepare do
+  unless Project.included_modules.include?(Milestones::ProjectPatch)
+    Project.send(:include, Milestones::ProjectPatch)
+  end
 end

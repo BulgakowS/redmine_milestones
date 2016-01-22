@@ -1,4 +1,4 @@
-module RemineMilestones
+module Milestones
   module ProjectsHelperPatch
     def self.included(base) # :nodoc:
 
@@ -45,6 +45,8 @@ module RemineMilestones
   end
 end
 
-unless Project.included_modules.include?(RemineMilestones::ProjectsHelperPatch)
-  Redmine::Helpers::Gantt.send(:include, RemineMilestones::ProjectsHelperPatch)
+Rails.configuration.to_prepare do
+  unless Project.included_modules.include?(Milestones::ProjectsHelperPatch)
+    Redmine::Helpers::Gantt.send(:include, Milestones::ProjectsHelperPatch)
+  end
 end

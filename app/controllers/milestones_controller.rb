@@ -157,7 +157,7 @@ class MilestonesController < ApplicationController
 
   def index
     @project = Project.find(params[:project_id])
-    @milestones = Milestone.find_by "project_id = ?", @project.id
+    @milestones = @project.milestones
   end
 
   def status_by

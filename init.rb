@@ -10,12 +10,12 @@ require_dependency 'milestones/version_patch'
 require_dependency 'milestones/query_patch'
 require_dependency 'milestones/project_patch'
 require_dependency 'milestones/projects_helper_patch'
-require_dependency "milestones/gantt_patch"
+require_dependency 'milestones/gantt_patch'
 require_dependency 'milestones/mailer_patch'
 
 Redmine::Plugin.register :milestones do
-  name 'Redmine Milestones plugin'
-  author 'RedmineCRM (edited by BulgakowS)'
+  name 'Redmine Milestones'
+  author 'Redmine'
   description 'Create, edit and manage milestones'
   version VERSION_NUMBER + '-pro' + VERSION_STATUS
   url 'http://redminecrm.com/projects/milestones'
@@ -24,7 +24,7 @@ Redmine::Plugin.register :milestones do
 
   menu :project_menu, :milestones, { :controller => 'milestones', :action => 'index' }, :caption => 'Milestones', :after => :activity, :param => :project_id
 
-  project_module :milestones_module do
+  project_module :milestones do
     permission :view_milestones, {
         :milestones => [:show, :index]
     }

@@ -12,7 +12,7 @@
     </p>
 <% end %>
 <% content_for :header_tags do %>
-    <%= javascript_include_tag "milestones.js", :plugin => 'redmine_milestones' %>
+    <%= javascript_include_tag "milestones.js", :plugin => 'milestones' %>
     <script>
         window.root_path = "<%= home_path.gsub(/\/$/,'') %>";
         document.observe("dom:loaded", function(){

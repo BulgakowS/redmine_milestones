@@ -1,6 +1,6 @@
 set :application, "Redmine Milestones"
-set :repository,  "git://github.com/k41n/redmine_milestones.git"
-set :deploy_to, "/var/data/saas/test/redmine/tmp/git-cache/redmine_milestones"
+set :repository,  "git://github.com/k41n/milestones.git"
+set :deploy_to, "/var/data/saas/test/redmine/tmp/git-cache/milestones"
 
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
@@ -19,7 +19,7 @@ after "deploy", :setup_symlinks
 after "deploy", "deploy:migrate"
 
 task :setup_symlinks, :roles => :app do
-  run "ln -nfs #{release_path} /var/data/saas/test/redmine/vendor/plugins/redmine_milestones"
+  run "ln -nfs #{release_path} /var/data/saas/test/redmine/vendor/plugins/milestones"
 end
 
 namespace :deploy do
@@ -41,7 +41,7 @@ namespace :deploy do
                    else raise ArgumentError, "unknown migration target #{migrate_target.inspect}"
                  end
      #run "cd #{directory}; bundle update"
-     run "cd /var/data/saas/test/redmine; bundle exec #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:migrate:plugin NAME=redmine_milestones --trace"
+     run "cd /var/data/saas/test/redmine; bundle exec #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:migrate:plugin NAME=milestones --trace"
    end
 
 end

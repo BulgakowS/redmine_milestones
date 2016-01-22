@@ -1,4 +1,4 @@
-module RemineMilestones
+module Milestones
 #  module Hooks
     class HelperIssuesShowDetailAfterSettingHook < Redmine::Hook::ViewListener
       def helper_issues_show_detail_after_setting(context = { })
